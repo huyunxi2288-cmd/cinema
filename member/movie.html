@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>电影查询</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/api.js"></script>
+</head>
+<body>
+
+<h2>🎬 电影列表（会员查询）</h2>
+
+<table border="1" cellpadding="8">
+    <thead>
+    <tr>
+        <th>电影编号</th>
+        <th>电影名称</th>
+        <th>时长</th>
+        <th>类型</th>
+        <th>上映日期</th>
+        <th>导演</th>
+    </tr>
+    </thead>
+    <tbody id="movieBody">
+    </tbody>
+</table>
+
+<br>
+<button onclick="location.href='/member/member-home.html'">返回会员中心</button>
+
+<script src="/js/member-movie.js"></script>
+</body>
+</html>

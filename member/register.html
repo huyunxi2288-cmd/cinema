@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>会员注册</title>
+</head>
+<body>
+<h2>会员注册</h2>
+
+<form id="registerForm">
+    <div>
+        昵称：<input type="text" id="nick" required>
+    </div>
+    <div>
+        手机号：<input type="text" id="phone" required>
+    </div>
+    <div>
+        密码：<input type="password" id="password" required>
+    </div>
+    <button type="submit">注册</button>
+</form>
+
+<p id="msg"></p>
+<hr>
+<p>已有账号？
+    <a href="login.html">返回登录</a>
+</p>
+
+
+<script>
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const data = {
+            nick: document.getElementById("nick").value,
+            phone: document.getElementById("phone").value,
+            password: document.getElementById("password").value
+        };
+
+        fetch("http://localhost:8080/api/member/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then(res => {
+                document.getElementById("msg").innerText = res.message;
+                if (res.success) {
+                    // 注册即登录
+                    localStorage.setItem("member", JSON.stringify(res.data));
+                    window.location.href = "member-home.html";
+                }
+
+            });
+    });
+</script>
+</body>
+</html>

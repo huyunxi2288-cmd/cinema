@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>影厅管理</title>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+</head>
+<body>
+
+<script>requireAdmin()</script>
+
+<h2>影厅列表</h2>
+<table border="1" id="table"></table>
+
+<script>
+    axios.get("/cinemaHall/list",{params:{pageNum:1,pageSize:20}})
+        .then(res=>{
+            table.innerHTML="<tr><th>ID</th><th>名称</th><th>座位数</th></tr>";
+            res.data.forEach(h=>{
+                table.innerHTML+=`<tr>
+      <td>${h.cinemaHallId}</td>
+      <td>${h.cinemaHallName}</td>
+      <td>${h.seatCount}</td>
+    </tr>`;
+            });
+        });
+</script>
+
+</body>
+</html>

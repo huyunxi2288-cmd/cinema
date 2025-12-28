@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>员工注册</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/api.js"></script>
+
+</head>
+<body>
+
+<h2>员工注册</h2>
+
+<input id="employeeId" placeholder="员工编号"><br><br>
+<input id="name" placeholder="姓名"><br><br>
+
+<select id="position">
+    <option value="普通员工">普通员工</option>
+    <option value="管理员">管理员</option>
+</select><br><br>
+
+<input id="phone" placeholder="手机号"><br><br>
+<input id="password" type="password" placeholder="密码"><br><br>
+
+<button onclick="register()">注册</button>
+<button onclick="location.href='/staff/login.html'">返回登录</button>
+
+
+<script>
+    function register() {
+        const employeeIdVal = document.getElementById("employeeId").value;
+        const nameVal = document.getElementById("name").value;
+        const positionVal = document.getElementById("position").value;
+        const phoneVal = document.getElementById("phone").value;
+        const passwordVal = document.getElementById("password").value;
+
+        const data = {
+            employeeId: employeeIdVal,
+            name: nameVal,
+            position: positionVal,
+            phone: phoneVal,
+            password: passwordVal
+        };
+
+        axios.post("/employee/register", data)
+            .then(() => {
+                alert("注册成功，请登录");
+                location.href = "login.html";
+            })
+            .catch(() => alert("注册失败"));
+    }
+</script>
+
+
+</body>
+</html>

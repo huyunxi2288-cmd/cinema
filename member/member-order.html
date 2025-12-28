@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>我的订单</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/member-order.js"></script>  <!-- 引入修改后的JS -->
+</head>
+<body>
+<h2>我的订单</h2>
+
+<div>
+    <button id="prevPageButton">上一页</button>
+    <button id="nextPageButton">下一页</button>
+</div>
+
+<table border="1" cellpadding="8">
+    <thead>
+    <tr>
+        <th>订单编号</th>
+        <th>订单时间</th>
+        <th>总金额</th>
+        <th>订单状态</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody id="orderBody">
+    </tbody>
+</table>
+
+<script>
+    let currentPage = 1;
+
+    // 获取当前会员的 audienceId
+    let currentAudienceId = localStorage.getItem("audienceId");  // 从 localStorage 获取当前会员ID
+
+    // 确保 audienceId 存在，如果没有，提醒用户登录
+    if (!currentAudienceId) {
+        alert("请先登录");
+        window.location.href = "/member/login.html";  // 如果没有 audienceId，跳转到登录页
+    }
+
+    // 加载当前会员的订单
+    function loadOrders(pageNum) {
+        const pageSize = 10; // 每页显示的订单数量
+
+        axios.get(`/order/member/${currentAudienceId}`, {
+            params: {
+                pageNum: pageNum,
+                pageSize: pageSize
+            }
+        }).then(res => {
+            const orders = res.data;
+            const tbody = document.getElementById("orderBody");
+            tbody.innerHTML = "";  // 清空表格内容
+
+            orders.forEach(order => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                        <td>${order.orderId}</td>
+                        <td>${order.orderTime}</td>
+                        <td>${order.totalAmount}</td>
+                        <td>${order.orderStatus}</td>
+                        <td><button onclick="viewOrderDetails('${order.orderId}')">查看详情</button></td>
+                    `;
+                tbody.appendChild(tr);
+            });
+        }).catch(() => {
+            alert("订单加载失败");
+        });
+    }
+
+    document.getElementById("nextPageButton").addEventListener("click", () => {
+        loadOrders(currentPage + 1);
+    });
+
+    document.getElementById("prevPageButton").addEventListener("click", () => {
+        loadOrders(currentPage - 1);
+    });
+
+    // 查看订单详情
+    function viewOrderDetails(orderId) {
+        window.location.href = `/order/details/${orderId}`;
+    }
+
+    // 页面加载时调用
+    window.onload = function() {
+        loadOrders(currentPage);
+    };
+</script>
+</body>
+</html>

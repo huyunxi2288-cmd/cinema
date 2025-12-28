@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>场次管理</title>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+</head>
+<body>
+
+<script>requireAdmin()</script>
+
+<h2>场次列表</h2>
+<table border="1" id="table"></table>
+
+<script>
+    axios.get("/cinemaSession/list",{params:{pageNum:1,pageSize:20}})
+        .then(res=>{
+            table.innerHTML="<tr><th>ID</th><th>电影</th><th>时间</th></tr>";
+            res.data.forEach(s=>{
+                table.innerHTML+=`<tr>
+      <td>${s.sessionId}</td>
+      <td>${s.movieId}</td>
+      <td>${s.showTime}</td>
+    </tr>`;
+            });
+        });
+</script>
+
+</body>
+</html>

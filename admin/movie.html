@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>电影管理</title>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+</head>
+<body>
+
+<script>requireAdmin()</script>
+
+<h2>电影管理</h2>
+<button onclick="load()">刷新</button>
+
+<table border="1" id="table"></table>
+
+<script>
+    function load() {
+        axios.get("/movie/list", {
+            params: { pageNum: 1, pageSize: 10 }
+        }).then(res => {
+            const t = document.getElementById("table");
+            t.innerHTML = "<tr><th>ID</th><th>名称</th><th>操作</th></tr>";
+            res.data.forEach(m => {
+                t.innerHTML += `
+        <tr>
+          <td>${m.movieId}</td>
+          <td>${m.movieName}</td>
+          <td>
+            <button onclick="del('${m.movieId}')">删除</button>
+          </td>
+        </tr>`;
+            });
+        });
+    }
+
+    function del(id) {
+        axios.delete("/movie/delete/" + id).then(load);
+    }
+
+    load();
+</script>
+
+</body>
+</html>

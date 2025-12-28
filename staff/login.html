@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>员工登录</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/api.js"></script>
+
+</head>
+<body>
+
+<h2>影院系统登录</h2>
+
+<input id="phone" placeholder="手机号"><br><br>
+<input id="password" type="password" placeholder="密码"><br><br>
+<button onclick="login()">登录</button>
+
+<script>
+    function login() {
+        const phoneVal = phone.value;
+        const passwordVal = password.value;
+
+        axios.post("/employee/login", null, {
+            params: {
+                phone: phoneVal,
+                password: passwordVal
+            }
+        }).then(res => {
+            if (res.data.includes("管理员")) {
+                localStorage.setItem("role", "admin");
+                location.href = "/admin/index.html";
+            } else if (res.data.includes("普通员工")) {
+                localStorage.setItem("role", "staff");
+                location.href = "/staff/cinemaSession.html";
+            } else {
+                alert(res.data);
+            }
+        });
+    }
+</script>
+
+
+</body>
+</html>

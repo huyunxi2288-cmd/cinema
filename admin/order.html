@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>订单管理</title>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+</head>
+<body>
+
+<script>requireAdmin()</script>
+
+<h2>订单列表</h2>
+<table border="1" id="table"></table>
+
+<script>
+    axios.get("/order/list",{params:{pageNum:1,pageSize:20}})
+        .then(res=>{
+            table.innerHTML="<tr><th>ID</th><th>金额</th><th>状态</th></tr>";
+            res.data.forEach(o=>{
+                table.innerHTML+=`<tr>
+      <td>${o.orderId}</td>
+      <td>${o.totalAmount}</td>
+      <td>${o.orderStatus}</td>
+    </tr>`;
+            });
+        });
+</script>
+
+</body>
+</html>

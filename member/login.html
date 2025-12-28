@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>会员登录</title>
+</head>
+<body>
+<h2>会员登录</h2>
+
+<form id="loginForm">
+    <div>
+        手机号：<input type="text" id="phone" required>
+    </div>
+    <div>
+        密码：<input type="password" id="password" required>
+    </div>
+    <button type="submit">登录</button>
+</form>
+
+<p id="msg"></p>
+<hr>
+<p>还没有账号？
+    <a href="register.html">立即注册</a>
+</p>
+
+
+<script>
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const data = {
+            phone: document.getElementById("phone").value,
+            password: document.getElementById("password").value
+        };
+
+        fetch("http://localhost:8080/api/member/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then(res => {
+                document.getElementById("msg").innerText = res.message;
+                if (res.success) {
+                    // 保存会员信息
+                    localStorage.setItem("member", JSON.stringify(res.data.data));
+                    window.location.href = "member-home.html";
+                }
+            });
+    });
+    localStorage.setItem("audienceId", response.data.audienceId);  // 在用户登录时保存 audienceId
+</script>
+</body>
+</html>
